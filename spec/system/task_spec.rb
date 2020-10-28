@@ -52,7 +52,7 @@ RSpec.describe 'Task', type: :system do
         visit project_task_path(project, task)
         expect(page).to have_content(task.title)
         expect(page).to have_content(task.status)
-        expect(page).to have_content(task.deadline.strftime('%-m/%d %-H:%M'))
+        expect(find('.task_list')).to have_content(short_time(task.deadline))
         expect(current_path).to eq project_task_path(project, task)
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe 'Task', type: :system do
         fill_in 'Deadline', with: Time.current
         click_button 'Update Task'
         click_link 'Back'
-        expect(find('.task_list')).to have_content(Time.current.strftime('%-m/%d %-H:%M'))
+        expect(find('.task_list')).to have_content(short_time(Time.current))
         expect(current_path).to eq project_tasks_path(project)
       end
 
@@ -77,7 +77,7 @@ RSpec.describe 'Task', type: :system do
         select 'done', from: 'Status'
         click_button 'Update Task'
         expect(page).to have_content('done')
-        expect(page).to have_content(shoert_time(Time.current))
+        expect(page).to have_content(short_time(Time.current))
         expect(current_path).to eq project_task_path(project, task)
       end
 
@@ -87,7 +87,7 @@ RSpec.describe 'Task', type: :system do
         select 'todo', from: 'Status'
         click_button 'Update Task'
         expect(page).to have_content('todo')
-        expect(page).not_to have_content(short_time('%-m/%d %-H:%M'))
+        expect(page).not_to have_content(short_time(Time.current))
         expect(current_path).to eq project_task_path(project, completion_task)
       end
     end
@@ -102,7 +102,7 @@ RSpec.describe 'Task', type: :system do
         click_link 'Destroy'
         # confirmダイアログのテスト
         page.driver.browser.switch_to.alert.accept
-        expect(page).to 'Task was successfully destroyed.'
+        expect(page).not_to have_content task.title
         expect(Task.count).to eq 0
         expect(current_path).to eq project_tasks_path(project)
       end
