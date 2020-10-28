@@ -10,5 +10,6 @@ FactoryBot.define do
     trait 'completion_task' do
       status { :done }
       completion_date { Time.current.yesterday }
+    end
   end
 end
