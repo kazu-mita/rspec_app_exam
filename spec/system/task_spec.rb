@@ -52,14 +52,14 @@ RSpec.describe 'Task', type: :system do
         visit project_task_path(project, task)
         expect(page).to have_content(task.title)
         expect(page).to have_content(task.status)
-        expect(find('.task_list')).to have_content(short_time(task.deadline))
+        expect(page).to have_content(task.deadline.strftime('%Y-%m-%d %H:%M'))
         expect(current_path).to eq project_task_path(project, task)
       end
     end
   end
 
   describe 'Task編集' do
-    let(:completion_task) { FactoryBot.create(:task, :completion_task) }
+    let(:completion_task) { create(:task, :completion_task) }
     context '正常系' do
       it 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
         # FIXME: テストが失敗するので修正してください
