@@ -77,7 +77,7 @@ RSpec.describe 'Task', type: :system do
         select 'done', from: 'Status'
         click_button 'Update Task'
         expect(page).to have_content('done')
-        expect(page).to have_content(Time.current.strftime('%-m/%d %-H:%M'))
+        expect(page).to have_content(shoert_time(Time.current))
         expect(current_path).to eq project_task_path(project, task)
       end
 
@@ -87,7 +87,7 @@ RSpec.describe 'Task', type: :system do
         select 'todo', from: 'Status'
         click_button 'Update Task'
         expect(page).to have_content('todo')
-        expect(page).not_to have_content(Time.current.strftime('%-m/%d %-H:%M'))
+        expect(page).not_to have_content(short_time('%-m/%d %-H:%M'))
         expect(current_path).to eq project_task_path(project, completion_task)
       end
     end
